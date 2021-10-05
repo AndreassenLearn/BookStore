@@ -6,7 +6,7 @@ using System;
 
 namespace DataLayer
 {
-    class EfCoreContext : DbContext
+    public class EfCoreContext : DbContext
     {
         public DbSet<Book> Books { get; set; }
         public DbSet<Author> Authors { get; set; }
