@@ -6,7 +6,7 @@ using System;
 
 namespace DataLayer
 {
-    class EfCoreContext : DbContext
+    public class EfCoreContext : DbContext
     {
         public DbSet<Book> Books { get; set; }
         public DbSet<Author> Authors { get; set; }
@@ -24,12 +24,11 @@ namespace DataLayer
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
             modelBuilder.Entity<BookAuthor>().HasKey(ba => new { ba.BookId, ba.AuthorId });
 
-            // Seeding
+            #region Data Seeding
             modelBuilder.Entity<Book>().HasData(
-                new Book { BookId = 1, Title = "Refactoring", Description = "Improving the design of existing code", PublishedOn =new DateTime(1999, 7, 8), Price = 40 },
+                new Book { BookId = 1, Title = "Refactoring", Description = "Improving the design of existing code", PublishedOn = new DateTime(1999, 7, 8), Price = 40 },
                 new Book { BookId = 2, Title = "Patterns of Enterprise Application Architecture", Description = "Written in direct response to the stiff challenges", PublishedOn = new DateTime(2002, 11, 15), Price = 53 },
                 new Book { BookId = 3, Title = "Domain - Driven Design", Description = "Linking business needs to software design", PublishedOn = new DateTime(2003, 8, 30), Price = 56 },
                 new Book { BookId = 4, Title = "Quantum Networking", Description = "Entangled quantum networking provides faster - than - light data communications", PublishedOn = new DateTime(2057, 1, 1), Price = 220 }
@@ -53,13 +52,17 @@ namespace DataLayer
                 new Review { ReviewId = 1, BookId = 1, Comment = "Great book", NumStars = 3 },
                 new Review { ReviewId = 2, BookId = 1, Comment = "Boring book", NumStars = 1 }
                 );
+            #endregion
 
-            // Show off
+            #region Relations
             //// Book/Review One-to-many relationship
             //modelBuilder.Entity<Review>()
             //    .HasOne(r => r.Book)
-            //    .WithMany(b => b.Reviews)
-            //    .HasForeignKey(r => r.ReviewId);
+            //    .WithMany(b => b.Reviews); // No need to specify foreign key. It will be auto-generated.
+            //
+            ////modelBuilder.Entity<Book>()
+            ////    .HasMany(b => b.Reviews)
+            ////    .WithOne(); // The relational navigation property to Book in Review doesn't has to be specified.
             //
             //// Book/PriceOffer One-to-one relationship
             //modelBuilder.Entity<Book>()
@@ -77,6 +80,12 @@ namespace DataLayer
             //    .HasOne(ba => ba.Author)
             //    .WithMany(a => a.BookAuthor)
             //    .HasForeignKey(ba => ba.AuthorId);
+            //
+            //// EF 5.0
+            ////modelBuilder.Entity<Book>()
+            ////    .HasMany(b => b.Authors)
+            ////    .WithMany(a => a.Books);
+            #endregion
         }
     }
 }
