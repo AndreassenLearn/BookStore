@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DataLayer;
 using DataLayer.Entities;
@@ -11,21 +10,34 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            #region Queries
-            #region Eager loading
+            EagerLoadingFirstBookAndAuthorsAndReviews();
+            EagerLoadingAllBooks();
+            ExplicitLoadingFirstBook();
+            ExplicitLoadingNumberOfReviews();
+            SelectLoadingFirstBook();
+        }
+
+        #region Queries
+        #region Eager loading
+        private static void EagerLoadingFirstBookAndAuthorsAndReviews()
+        {
             using (var context = new EfCoreContext())
             {
                 Book book = context.Books
+                    .OrderBy(b => b.BookId)
                     .Include(b => b.Reviews)
                     .Include(b => b.BookAuthor)
                     .ThenInclude(ba => ba.Author)
                     .AsNoTracking()
                     .FirstOrDefault();
 
-                Console.WriteLine("Eager loading: First book and its auhors and reviews");
+                Console.WriteLine("Eager loading: First book and its authors and reviews");
                 PrintBooks(book);
             }
+        }
 
+        private static void EagerLoadingAllBooks()
+        {
             using (var context = new EfCoreContext())
             {
                 var books = context.Books
@@ -37,12 +49,18 @@ namespace ConsoleApp
                 Console.WriteLine("Eager loading: All books and their authors");
                 PrintBooks(books);
             }
-            #endregion
 
-            #region Explicit loading
+        }
+        #endregion
+
+        #region Explicit loading
+        private static void ExplicitLoadingFirstBook()
+        {
             using (var context = new EfCoreContext())
             {
-                Book book = context.Books.FirstOrDefault();
+                Book book = context.Books
+                    .OrderBy(b => b.BookId)
+                    .FirstOrDefault();
 
                 Console.WriteLine("Explicit loading (1.0): First book");
                 PrintBooks(book);
@@ -63,10 +81,15 @@ namespace ConsoleApp
                 Console.WriteLine("Explicit loading (1.2): First book and its authors and reviews");
                 PrintBooks(book);
             }
+        }
 
+        private static void ExplicitLoadingNumberOfReviews()
+        {
             using (var context = new EfCoreContext())
             {
-                Book book = context.Books.FirstOrDefault();
+                Book book = context.Books
+                    .OrderBy(b => b.BookId)
+                    .FirstOrDefault();
 
                 PrintBooks(book);
 
@@ -89,12 +112,16 @@ namespace ConsoleApp
                     Console.WriteLine($"Stars: {numStars}");
                 }
             }
-            #endregion
+        }
+        #endregion
 
-            #region Select loading
+        #region Select loading
+        private static void SelectLoadingFirstBook()
+        {
             using (var context = new EfCoreContext())
             {
                 var book = context.Books
+                    .OrderBy(b => b.BookId)
                     .Select(b => new
                     {
                         Title = b.Title,
@@ -106,9 +133,9 @@ namespace ConsoleApp
                 Console.WriteLine("Select loading: Title, price, and number og reviews of the first book");
                 Console.WriteLine($"Title: {book.Title}, Price: {book.Price}, Number of reviews: {book.NumberOfreviews}");
             }
-            #endregion
-            #endregion
         }
+        #endregion
+        #endregion
 
         static private void PrintBooks(params Book[] books)
         {
