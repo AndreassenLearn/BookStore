@@ -1,0 +1,36 @@
+﻿@page
+@model WebApp.Pages.TagHelpersModel
+@{
+  ViewData["Title"] = "Tag Helpers";
+}
+
+<div>
+  <h5>1. Some used tag helpers in this project:</h5>
+  <ul>
+    <li>*Anchor tag helpers*: Generates href based on parameters, ie. reference to a page with 'asp-page'.</li>
+    <li>asp-append-version: Appends version string to the end of an image name. By doing this, an old and a new image will be distinguishable from each other and the old one can be removed from the client's browser cache.</li>
+  </ul>
+</div>
+
+<div>
+  <h5>2. Tag helpers vs. HTML helpers</h5>
+  <p>
+    HTML helpers are invoked/called like methods, whereas tag helpers attach more directly to html elements.
+  </p>
+  <ul>
+    <li>HTML helpers: Html.BeginForm(), Html.LabelFor(), Html.ValidationSummary() etc.</li>
+    <li>Tag helpers: asp-page, asp-action, asp-for, asp-validation-for etc.</li>
+  </ul>
+</div>
+
+<div>
+  <h5>3.</h5>
+  <h6>3.1</h6>
+  <a href="https://www.eucsyd.dk/" runat="server">EUC Syd</a>
+
+  <h6>3.2</h6>
+  <img style="width:100%" src="@Model.ImageUrl" asp-append-version="true">
+
+  <h6>3.3</h6>
+  <label asp-for="ImageUrl"></label>
+</div>

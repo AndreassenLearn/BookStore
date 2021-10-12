@@ -244,7 +244,7 @@ namespace DataLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("DataLayer.Entities.Book", "Book")
-                        .WithMany("BookAuthor")
+                        .WithMany("BookAuthors")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -283,7 +283,7 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.Entities.Book", b =>
                 {
-                    b.Navigation("BookAuthor");
+                    b.Navigation("BookAuthors");
 
                     b.Navigation("PriceOffer");
 
