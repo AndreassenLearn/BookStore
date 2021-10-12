@@ -19,7 +19,7 @@ namespace DataLayer
 
             public PriceOffer PriceOffer { get; set; }
             public ICollection<Review> Reviews { get; set; }
-            public ICollection<BookAuthor> BookAuthor { get; set; }
+            public ICollection<BookAuthor> BookAuthors { get; set; }
         }
     }
 }

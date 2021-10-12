@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DataLayer;
 using DataLayer.Entities;
@@ -10,11 +11,16 @@ namespace ConsoleApp
     {
         static void Main(string[] args)
         {
-            EagerLoadingFirstBookAndAuthorsAndReviews();
-            EagerLoadingAllBooks();
-            ExplicitLoadingFirstBook();
-            ExplicitLoadingNumberOfReviews();
-            SelectLoadingFirstBook();
+            InitializeDb();
+
+            //EagerLoadingFirstBookAndAuthorsAndReviews();
+            //EagerLoadingAllBooks();
+            //ExplicitLoadingFirstBook();
+            //ExplicitLoadingNumberOfReviews();
+            //SelectLoadingFirstBook();
+
+            //AddNewBookWithNewReview();
+            AddNewBookWithOldAuthor();
         }
 
         #region Queries
@@ -26,7 +32,7 @@ namespace ConsoleApp
                 Book book = context.Books
                     .OrderBy(b => b.BookId)
                     .Include(b => b.Reviews)
-                    .Include(b => b.BookAuthor)
+                    .Include(b => b.BookAuthors)
                     .ThenInclude(ba => ba.Author)
                     .AsNoTracking()
                     .FirstOrDefault();
@@ -41,7 +47,7 @@ namespace ConsoleApp
             using (var context = new EfCoreContext())
             {
                 var books = context.Books
-                    .Include(b => b.BookAuthor)
+                    .Include(b => b.BookAuthors)
                     .ThenInclude(ba => ba.Author)
                     .AsNoTracking()
                     .ToArray();
@@ -66,7 +72,7 @@ namespace ConsoleApp
                 PrintBooks(book);
 
                 context.Entry(book)
-                    .Collection(b => b.BookAuthor)
+                    .Collection(b => b.BookAuthors)
                     .Query()
                     .Include(ba => ba.Author)
                     .Load();
@@ -137,15 +143,67 @@ namespace ConsoleApp
         #endregion
         #endregion
 
+        #region Related data
+        private static void AddNewBookWithNewReview()
+        {
+            using (var context = new EfCoreContext())
+            {
+                Book book = new Book
+                {
+                    Title = "Test Book",
+                    PublishedOn = DateTime.Now,
+                    Reviews = new List<Review>()
+                    {
+                        new Review{ NumStars = 5, Comment = "Great test book", ReviewerName = "Mr. U Test" }
+                    }
+                };
+
+                context.Add(book);
+
+                //context.Books.Add(book);
+
+                context.SaveChanges();
+            }
+        }
+
+        private static void AddNewBookWithOldAuthor()
+        {
+            using (var context = new EfCoreContext())
+            {
+                Book oldBook = context.Books
+                    .Where(b => b.BookId == 2)
+                    .Include(b => b.BookAuthors)
+                    .ThenInclude(ba => ba.Author)
+                    .FirstOrDefault();
+
+                Book newBook = new Book
+                {
+                    Title = "Test Book 2",
+                    PublishedOn = DateTime.Now,
+                    BookAuthors = new List<BookAuthor>()
+                };
+
+                newBook.BookAuthors.Add(new BookAuthor
+                {
+                    Book = newBook,
+                    Author = oldBook.BookAuthors.FirstOrDefault().Author
+                });
+
+                context.Add(newBook);
+                context.SaveChanges();
+            }
+        }
+        #endregion
+
         static private void PrintBooks(params Book[] books)
         {
             foreach (Book book in books)
             {
                 Console.WriteLine($"BookId: {book.BookId}, Title: {book.Title}, Price: {book.Price}");
 
-                if (book.BookAuthor != null)
+                if (book.BookAuthors != null)
                 {
-                    foreach (BookAuthor bookAuthor in book.BookAuthor)
+                    foreach (BookAuthor bookAuthor in book.BookAuthors)
                     {
                         Console.WriteLine($"Author: {bookAuthor.Author.Name}");
                     }
@@ -158,6 +216,16 @@ namespace ConsoleApp
                         Console.WriteLine($"Stars: {review.NumStars}, Comment: {review.Comment}");
                     }
                 }
+            }
+        }
+
+        private static void InitializeDb()
+        {
+            using (var context = new EfCoreContext())
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+                Console.WriteLine("Database recreated");
             }
         }
     }
