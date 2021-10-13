@@ -20,7 +20,7 @@ namespace ConsoleApp
             //SelectLoadingFirstBook();
 
             //AddNewBookWithNewReview();
-            AddNewBookWithOldAuthor();
+            //AddNewBookWithOldAuthor();
         }
 
         #region Queries

@@ -52,6 +52,10 @@ namespace DataLayer
                 new Review { ReviewId = 1, BookId = 1, Comment = "Great book", NumStars = 3 },
                 new Review { ReviewId = 2, BookId = 1, Comment = "Boring book", NumStars = 1 }
                 );
+
+            modelBuilder.Entity<PriceOffer>().HasData(
+                new PriceOffer { PriceOfferId = 1, BookId = 2, NewPrice = 52, PromtionalText = "Save $1 if you order 40 years ahead!" }
+                );
             #endregion
 
             #region Relations

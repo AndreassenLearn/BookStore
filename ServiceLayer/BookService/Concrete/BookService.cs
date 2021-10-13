@@ -15,11 +15,19 @@ namespace ServiceLayer.Conrete
             _context = context;
         }
 
-        public IQueryable<ListBookDto> GetListBooks()
+        public Tuple<IQueryable<ListBookDto>, ushort, ushort> GetListBooks(QueryOptions queryOptions)
         {
-            return _context.Books
+            ushort pageNumber = queryOptions.PageNumber;
+            
+            IQueryable<ListBookDto> books = _context.Books
                 .AsNoTracking()
-                .MapListBookToDto();
+                .MapListBookToDto()
+                .SearchFor(queryOptions.SearchParams)
+                .Filter(queryOptions.FilterOptions)
+                .OrderBooksBy(queryOptions.OrderByOptions)
+                .Page(ref pageNumber, queryOptions.PageSize, out ushort numberOfPages);
+
+            return Tuple.Create(books, pageNumber, numberOfPages);
         }
     }
 }
