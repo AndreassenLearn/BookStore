@@ -5,46 +5,53 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Book Store</h1>
 </div>
+
+<form method="get">
+  <div class="input-group mb-3">
+    <input type="search" asp-for="@Model.SearchParam" class="form-control" placeholder="Search">
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" type="submit">
+        Search<i class="fas fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <label class="input-group-text" asp-for="@Model.OrderByOption"></label>
+    </div>
+    <select class="custom-select" asp-for="@Model.OrderByOption" asp-items="Html.GetEnumSelectList<BookSort.OrderByOptions>()"></select>
+  </div>
+
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" asp-for="@Model.HasPriceOffer">
+    <label class="form-check-label" asp-for="@Model.HasPriceOffer"></label>
+  </div>
+
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <label class="input-group-text" asp-for="@Model.PageSize"></label>
+    </div>
+    <select class="custom-select" asp-for="@Model.PageSize" asp-items="Html.GetEnumSelectList<IndexModel.EPageSize>()"></select>
+  </div>
+
+  <div>
+    Page
+    <input asp-for="@Model.PageNumber" value="@Model.PageNumber" />
+  </div>
+
+  @*<button class="btn btn-outline-secondary" type="submit">
+    Search<i class="fas fa-search"></i>
+  </button>*@
+</form>
+
+<hr />
 
 <div>
   @foreach (ListBookDto book in Model.Books)
   {
-    <div>
-      <h2>@book.Title</h2>
-      <p>
-        by @foreach (string authorName in book.AuthorNames)
-        {
-          if (book.AuthorNames.Last() == authorName)
-          {
-            <span>@authorName</span>
-          }
-          else
-          {
-            <span>@authorName, </span>
-          }
-        }
-        <br />
-        Reviews: @book.NumOfReviews @(book.NumOfReviews > 0 ? "(" + book.AverageRating + ")" : "")<br />
-
-        @if (Model.Books.First() == book)
-        {
-          book.NewPrice = book.Price - 1;
-          book.PromtionalText = "Save $1 if you order 40 years ahead!";
-        }
-
-        Price:
-        @if (book.NewPrice.HasValue)
-        {
-          <span style="color:brown">$@book.NewPrice <strike>$@book.Price</strike><i> @book.PromtionalText</i></span>
-        }
-        else
-        {
-          <span>$@book.Price</span>
-        }
-      </p>
-    </div>
+    <partial name="_ListBookView" model="book"/>
   }
 </div>

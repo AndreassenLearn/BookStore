@@ -1,0 +1,30 @@
+﻿@model ServiceLayer.BookService.ListBookDto
+
+<div>
+  <h2>@Model.Title</h2>
+  <p>
+    by @foreach (string authorName in Model.AuthorNames)
+    {
+      if (Model.AuthorNames.Last() == authorName)
+      {
+        <span>@authorName</span>
+      }
+      else
+      {
+        <span>@authorName, </span>
+      }
+    }
+    <br />
+    Reviews: @Model.NumOfReviews @(Model.NumOfReviews > 0 ? "(" + Model.AverageRating + ")" : "")<br />
+
+    Price:
+    @if (Model.NewPrice.HasValue)
+    {
+      <span style="color:brown">$@Model.NewPrice <strike>$@Model.Price</strike><i> @Model.PromtionalText</i></span>
+    }
+    else
+    {
+      <span>$@Model.Price</span>
+    }
+  </p>
+</div>
