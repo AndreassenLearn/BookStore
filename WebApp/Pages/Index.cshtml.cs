@@ -34,12 +34,12 @@ namespace WebApp.Pages
         [BindProperty(SupportsGet = true), Display(Name = "Page size")]
         public EPageSize PageSize { get; set; } = EPageSize.PS10;
         [BindProperty(SupportsGet = true)]
-        public ushort PageNumber { get; set; } = 1;
+        public ushort PageNumber { get; set; }
         public ushort NumberOfPages { get; private set; }
 
         public List<ListBookDto> Books { get; private set; }
 
-        public void OnGet()
+        public void OnGet(ushort pg = 1)
         {
             using (var context = new EfCoreContext())
             {
@@ -54,7 +54,33 @@ namespace WebApp.Pages
                         HasPriceOffer = HasPriceOffer
                     },
                     PageSize = (ushort)PageSize,
-                    PageNumber = PageNumber
+                    PageNumber = pg
+                };
+
+                var result = bookService.GetListBooks(options);
+
+                Books = result.Item1.ToList();
+                PageNumber = result.Item2;
+                NumberOfPages = result.Item3;
+            }
+        }
+
+        public void OnGetPage(ushort pg)
+        {
+            using (var context = new EfCoreContext())
+            {
+                BookService bookService = new(context);
+
+                QueryOptions options = new()
+                {
+                    SearchParams = SearchParam,
+                    OrderByOptions = OrderByOption,
+                    FilterOptions = new FilterOptions
+                    {
+                        HasPriceOffer = HasPriceOffer
+                    },
+                    PageSize = (ushort)PageSize,
+                    PageNumber = pg
                 };
 
                 var result = bookService.GetListBooks(options);

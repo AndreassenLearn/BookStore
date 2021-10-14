@@ -1,0 +1,14 @@
+﻿@page "{handler?}"
+@model WebApp.Pages.Books.DetailsBookModel
+@{
+  ViewData["Title"] = Model.Book.Title;
+}
+
+<h2>Id: @Model.Book.BookId</h2>
+<h2>Title: @Model.Book.Title</h2>
+
+<form asp-page-handler="BookId" method="get">
+  ID
+  <input asp-for="@Model.Book.BookId" name="bookId" value="@Model.Book.BookId" />
+  <button class="btn btn-dark" type="submit">Get ID</button>
+</form>

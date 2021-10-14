@@ -29,5 +29,14 @@ namespace ServiceLayer.Conrete
 
             return Tuple.Create(books, pageNumber, numberOfPages);
         }
+
+        public DetailsBookDto GetDetailsBook(int? bookId) =>
+            _context.Books
+                .Where(b => b.BookId == bookId)
+                .FirstOrDefault()
+                .MapDetailsBookDto();
+
+        public int Count() =>
+            _context.Books.Count();
     }
 }

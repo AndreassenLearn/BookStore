@@ -1,11 +1,11 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+  ViewData["Title"] = "Home page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Book Store</h1>
+  <h1 class="display-4">Book Store</h1>
 </div>
 
 <form method="get">
@@ -43,8 +43,28 @@
   </div>
 
   @*<button class="btn btn-outline-secondary" type="submit">
-    Search<i class="fas fa-search"></i>
-  </button>*@
+      Search<i class="fas fa-search"></i>
+    </button>*@
+
+  <div>
+    <ul class="pagination">
+      @for (var i = 1; i <= Model.NumberOfPages; i++)
+      {
+        @if (i == Model.PageNumber)
+        {
+          <li class="page-item active">
+            <input class="page-link" type="submit" name="pg" value="@i" disabled /> 
+          </li>
+        }
+        else
+        {
+          <li class="page-item">
+            <input class="page-link" type="submit" name="pg" value="@i" />
+          </li>
+        }
+      }
+    </ul>
+  </div>
 </form>
 
 <hr />
@@ -52,6 +72,6 @@
 <div>
   @foreach (ListBookDto book in Model.Books)
   {
-    <partial name="_ListBookView" model="book"/>
+    <partial name="Books\_ListBookView" model="book" />
   }
 </div>

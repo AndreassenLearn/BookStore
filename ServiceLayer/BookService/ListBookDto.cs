@@ -8,6 +8,7 @@ namespace ServiceLayer.BookService
 {
     public class ListBookDto
     {
+        public int BookId { get; set; }
         public string Title { get; set; }
         public ICollection<string> AuthorNames { get; set; }
         public double? AverageRating { get; set; }

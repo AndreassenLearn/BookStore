@@ -7,12 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{490DE8B5-7CC5-4EBE-AF53-D7F1044A293A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{8740B018-E602-4F9C-BB90-16AA353FDB66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApp", "WebApp\WebApp.csproj", "{8740B018-E602-4F9C-BB90-16AA353FDB66}"
 	ProjectSection(ProjectDependencies) = postProject
 		{AEA7E153-997B-4D44-AFDD-D5339D555979} = {AEA7E153-997B-4D44-AFDD-D5339D555979}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayer", "ServiceLayer\ServiceLayer.csproj", "{AEA7E153-997B-4D44-AFDD-D5339D555979}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceLayer", "ServiceLayer\ServiceLayer.csproj", "{AEA7E153-997B-4D44-AFDD-D5339D555979}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
