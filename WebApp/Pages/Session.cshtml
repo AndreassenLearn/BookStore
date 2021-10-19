@@ -1,0 +1,24 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@model WebApp.Pages.SessionModel
+@{
+    ViewData["Title"] = "Session";
+}
+
+<div>
+  @if (HttpContext.Session.GetString("NAME") != null && HttpContext.Session.GetInt32("AGE") != null)
+  {
+    <h3>Hello @HttpContext.Session.GetString("NAME")! How has your @HttpContext.Session.GetInt32("AGE") years been?</h3>
+  }
+  else
+  {
+    <form method="post">
+      <label asp-for="@Model.Name"></label>
+      <input asp-for="@Model.Name" />
+      <br />
+      <label asp-for="@Model.Age"></label>
+      <input asp-for="@Model.Age" />
+      <button type="submit">Submit</button>
+    </form>
+  }
+</div>

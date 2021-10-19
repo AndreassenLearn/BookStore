@@ -24,6 +24,17 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+
+            #region Session
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10); // Timeout is kept short for testing.
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +53,8 @@ namespace WebApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseRouting();
 
