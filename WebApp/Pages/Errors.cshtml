@@ -1,0 +1,9 @@
+﻿@page "{int}"
+@model WebApp.Pages.ErrorsModel
+@{
+  ViewData["Title"] = "Error";
+}
+
+@* This page is hit whenever the folder named 'Errors' doesn't contain a page that is named the same as the error code, ie. 404. *@
+
+<h1>Error Code: @Model.ErrorCode</h1>

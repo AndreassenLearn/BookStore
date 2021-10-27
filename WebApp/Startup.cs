@@ -51,6 +51,7 @@ namespace WebApp
                 app.UseHsts();
             }
 
+            app.UseStatusCodePagesWithReExecute("/Errors/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
